@@ -1,0 +1,47 @@
+## Default values.yaml for Sonar
+## This is a YAML-formatted file.
+## ref: https://infragravity.com/knowledge-base/
+image:
+  repo: "infragravity/sonar"
+  tag: "latest"
+  pullPolicy: Always
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 0.1
+  limits:
+    memory: 128Mi
+    cpu: 1
+
+## exposed services
+single:
+  enabled: true
+  service: 
+      enabled: true 
+      type: ClusterIP
+      
+## Exposed Sonar configuration
+## ref: https://infragravity.com/knowledge-base/
+config:
+  # global_tags:
+  #   cluster: "mycluster"
+  #agent:
+    #interval: "10s"
+  outputs:
+    sonar:
+      exporter_enabled: true
+      exporter_port: 5000
+      exporter_cache_milliseconds: 30000
+  inputs:
+    kubernetes:
+      url: "http://$HOSTNAME:10255"
+      bearer_token: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+      insecure_skip_verify: true
+    docker: 
+      endpoint: "unix:///var/run/docker.sock"
+      timeout: "5s"
+      perdevice: true
+      total: false

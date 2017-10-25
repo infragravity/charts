@@ -1,0 +1,13 @@
+name: sonar
+version: 0.1.7
+description: Sonar is an agent written in dotnet 2.0 for collecting, processing, and writing metrics.
+keywords:
+- sonar
+- collector
+- timeseries
+- infragravity
+home: https://www.infragravity.com
+maintainers:
+- name: Infragravity LLC
+  email: info@infragravity.com
+engine: gotpl

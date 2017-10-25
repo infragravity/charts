@@ -1,0 +1,22 @@
+##Service exposed only when exporter is defined
+{{- if not (empty .Values.config.outputs.sonar.exporter_enabled) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:   
+    prometheus.io/scrape: !!str {{required "Missing exporter_enabled value." .Values.config.outputs.sonar.exporter_enabled }}
+    prometheus.io/path: /metrics
+    prometheus.io/port: !!str {{required "Missing exporter_port value." .Values.config.outputs.sonar.exporter_port }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: {{required "Missing exporter_port value." .Values.config.outputs.sonar.exporter_port }}
+      targetPort: 5000
+      name: "prom-listener" 
+  selector:
+    app: {{ template "fullname" . }}
+{{- end }}

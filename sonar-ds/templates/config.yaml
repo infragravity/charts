@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '5000'
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  Sonar.config: |-
+{{ .Files.Get "Sonar.config" | indent 8 }}

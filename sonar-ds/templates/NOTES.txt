@@ -1,0 +1,33 @@
+{{- if eq .Values.config.outputs.sonar.exporter_enabled true }}
+
+{{- if empty (.Values.config.outputs.sonar.exporter_port) }}
+
+Need to set an Sonar exporter port to deploy this instance:
+
+.Values.config.outputs.sonar.exporter_port
+
+All metric outputs to Prometeus will be exposed via default port 5000. 
+
+{{- else }}
+
+The Sonar exporter port configured for this instance: {{ .Values.config.outputs.sonar.exporter_port }}
+
+{{- end }}
+
+{{- else }}
+
+The Sonar exporter for Prometheus is not enabled. 
+To enable it, set .Values.config.outputs.sonar.exporter_enabled variable.
+
+{{- end }}
+To open a shell session in the container running Sonar run the following:
+
+- kubectl exec -i -t --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ template "fullname" . }} -o jsonpath='{.items[0].metadata.name}') /bin/sh
+
+To tail the logs for a Sonar pod in the Daemonset run the following:
+
+- kubectl logs -f --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ template "fullname" . }} -o jsonpath='{ .items[0].metadata.name }')
+
+To list the running Sonar instances run the following:
+
+- kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ template "fullname" . }} -w

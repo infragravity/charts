@@ -1,0 +1,81 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:
+    {{- if not (empty .Values.config.outputs.sonar.exporter_enabled) }}
+    prometheus.io/scrape: !!str {{required "Missing exporter_enabled value." .Values.config.outputs.sonar.exporter_enabled }}
+    prometheus.io/path: /metrics
+    prometheus.io/port: !!str {{required "Missing exporter_port value." .Values.config.outputs.sonar.exporter_port }}
+    {{- end }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repo }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        env:
+        - name: SONAR_EXPORTER_ENABLED
+          value: !!str {{required "Missing exporter_enabled value." .Values.config.outputs.sonar.exporter_enabled }}
+        - name: SONAR_EXPORTER_PORT
+          value: !!str {{required "Missing exporter_port value." .Values.config.outputs.sonar.exporter_port }}
+        - name: SONAR_EXPORTER_CACHE_MILLISECONDS
+          value: !!str {{required "Missing exporter_cache_milliseconds value." .Values.config.outputs.sonar.exporter_cache_milliseconds }} 
+        - name: SONAR_CONFIG_PATH
+          value: "/var/sonar/config/Sonar.config"     
+        - name: SONAR_KEY_PATH
+          value: "/var/sonar/keys/Sonarc.dll.config"      
+      # This pulls HOSTNAME from the node, not the pod.
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: "HOST_PROC"
+          value: "/rootfs/proc"
+        - name: "HOST_SYS"
+          value: "/rootfs/sys"
+        volumeMounts:
+        - name: sysro
+          mountPath: /rootfs/sys
+          readOnly: true
+        - name: procro
+          mountPath: /rootfs/proc
+          readOnly: true
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+        - name: varrunutmpro
+          mountPath: /var/run/utmp
+          readOnly: true
+        - name: config
+          mountPath: /var/sonar/config
+        - name: secret
+          mountPath: /var/sonar/keys
+      volumes:
+      - name: sysro
+        hostPath:
+          path: /sys
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: procro
+        hostPath:
+          path: /proc
+      - name: varrunutmpro
+        hostPath:
+          path: /var/run/utmp
+      - name: config
+        configMap:
+          name: {{ template "fullname" . }}
+      - name: secret
+        secret:
+          secretName: {{ template "fullname" . }}

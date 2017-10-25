@@ -5,7 +5,7 @@
 ## TL;DR
 
 ```console
-$ helm install stable/sonar-ds
+$helm install stable/sonar-ds
 ```
 
 ## Introduction
@@ -21,7 +21,7 @@ This chart bootstraps a `sonar` deployment on a [Kubernetes](http://kubernetes.i
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/sonar
+$helm install --name my-release stable/sonar
 ```
 
 The command deploys Sonar daemonset on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section as well as the [values.yaml](/values.yaml) file lists the parameters that can be configured during installation.
@@ -37,13 +37,13 @@ $ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
- 
+
 ## Configuration
 
 The default configuration parameters are listed in `values.yaml`. To change the defaults, specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$helm install --name my-release \
     stable/sonar
 ```
 
@@ -52,7 +52,7 @@ The above command allows the chart to deploy Sonar with configuration of inputs 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/sonar
+$helm install --name my-release -f values.yaml stable/sonar
 ```
 
 ## Sonar Configuration
@@ -60,5 +60,5 @@ $ helm install --name my-release -f values.yaml stable/sonar
 This chart deploys the following by default:
 
 - `sonar` (`sonar`) running in a daemonset with the following plugins enabled
-  * WSMAN - WMI metrics using WS-Management protocol
-  * MSSQL - Sql Server
+  - WSMAN - WMI metrics using WS-Management protocol
+  - MSSQL - Sql Server

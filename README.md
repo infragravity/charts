@@ -1,2 +1,2 @@
 # charts
-Charts for Kubernetes
+Sonar Charts (Helm) for Kubernetes.

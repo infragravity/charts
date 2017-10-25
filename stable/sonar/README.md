@@ -1,4 +1,4 @@
-# Sonar-DS
+# Sonar
 
 [Sonar](https://github.com/infragravity/charts) is a server agent written .NET Core by developers at [Infragravity](https://infragravity.com) for collecting & reporting metrics. This chart runs Sonar instance to collect SQL server and WMI metrics from pods on your cluster. If you need to poll Windows or SQL instances across the infrastructure, there is a `stable/sonar-ds` chart that may be more suitable to address this scenario.
 
@@ -59,6 +59,6 @@ $helm install --name my-release -f values.yaml stable/sonar
 
 This chart deploys the following by default:
 
-- `sonar` (`sonar`) running in a daemonset with the following plugins enabled
+- `sonar` (`sonar`) running as a pod with the following plugins enabled
   - WSMAN - WMI metrics using WS-Management protocol
   - MSSQL - Sql Server

@@ -1,6 +1,6 @@
 # Sonar-DS
 
-[Sonar](https://github.com/infragravity/charts) is a server agent written .NET Core by developers at [Infragravity](https://infragravity.com) for collecting & reporting metrics. This chart runs a DaemonSet of Infragravity instances to collect SQL server and WMI metrics from pods on your cluster. If you need to poll individual instances of infrastructure or APIs there is a `stable/sonar` chart that may be more suitable to address this scenario.
+[Sonar](https://github.com/infragravity/charts) is a server agent written .NET Core by developers at [Infragravity](https://infragravity.com) for collecting & reporting metrics. This chart runs a DaemonSet of Infragravity instances to collect SQL server and WMI metrics from continers. If you need to scape metrics without redundancy, then `stable/sonar` chart that may be more suitable to address this scenario.
 
 ## TL;DR
 

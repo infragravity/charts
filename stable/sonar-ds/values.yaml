@@ -3,7 +3,7 @@
 ## ref: https://infragravity.com/knowledge-base/
 image:
   repo: "infragravity/sonar"
-  tag: "latest"
+  tag: "master"
   pullPolicy: Always
 
 ## Configure resource requests and limits

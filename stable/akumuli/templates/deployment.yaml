@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /api/stats
+              port: {{ .Values.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /api/stats
+              port: {{ .Values.service.internalPort }}
+#          resources:
+#{{ toYaml .Values.resources | indent 10 }}
+          env:                          
+          - name: volume_size
+            value: {{ .Values.persistence.volume_size | quote }}
+          - name: nvolumes
+            value: "4"
+          volumeMounts:
+          - name: data
+            mountPath: /Akumuli
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}

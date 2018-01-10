@@ -22,6 +22,16 @@ spec:
       - name: {{ template "fullname" . }}
         image: "{{ .Values.image.repo }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+        {{- if not (empty .Values.config.outputs.sonar.exporter_enabled) }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: {{required "Missing exporter_port value." .Values.config.outputs.sonar.exporter_port }}
+          timeoutSeconds: 5
+          periodSeconds: 30
+          successThreshold: 1
+          failureThreshold: 3
+        {{- end }} 
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         env:
@@ -45,34 +55,11 @@ spec:
         - name: "HOST_SYS"
           value: "/rootfs/sys"
         volumeMounts:
-        - name: sysro
-          mountPath: /rootfs/sys
-          readOnly: true
-        - name: procro
-          mountPath: /rootfs/proc
-          readOnly: true
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
-        - name: varrunutmpro
-          mountPath: /var/run/utmp
-          readOnly: true
         - name: config
           mountPath: /var/sonar/config
         - name: secret
           mountPath: /var/sonar/keys
       volumes:
-      - name: sysro
-        hostPath:
-          path: /sys
-      - name: docker-socket
-        hostPath:
-          path: /var/run/docker.sock
-      - name: procro
-        hostPath:
-          path: /proc
-      - name: varrunutmpro
-        hostPath:
-          path: /var/run/utmp
       - name: config
         configMap:
           name: {{ template "fullname" . }}

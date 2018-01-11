@@ -29,13 +29,17 @@ spec:
             httpGet:
               path: /api/stats
               port: {{ .Values.service.internalPort }}
-#          resources:
-#{{ toYaml .Values.resources | indent 10 }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
           env:                          
           - name: volume_size
             value: {{ .Values.persistence.volume_size | quote }}
           - name: nvolumes
-            value: "4"
+            value: {{ .Values.persistence.nvolumes | quote }}
           volumeMounts:
           - name: data
             mountPath: /Akumuli

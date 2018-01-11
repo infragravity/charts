@@ -40,6 +40,6 @@ resources: {}
 persistence: 
   enabled: true
   accessMode: ReadWriteOnce
-  size: 8Gi
-  volume_size: '1Gb'
+  size: 16Gi
+  volume_size: '4Gb'
   nvolumes: 4

@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: akumuli/akumuli
-  tag: master
+  tag: skylake
   pullPolicy: IfNotPresent
 service:
   name: akumuli
@@ -40,6 +40,6 @@ resources: {}
 persistence: 
   enabled: true
   accessMode: ReadWriteOnce
-  size: 16Gi
-  volume_size: '4Gb'
+  size: 8Gi
+  volume_size: '1Gb'
   nvolumes: 4

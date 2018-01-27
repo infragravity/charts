@@ -36,6 +36,7 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
+{{- if .Values.persistence.enabled }}    
           env:                          
           - name: volume_size
             value: {{ .Values.persistence.volume_size | quote }}
@@ -48,3 +49,4 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
+{{- end }}          

@@ -1,6 +1,7 @@
 ## Default values.yaml for Sonar
 ## This is a YAML-formatted file.
 ## ref: https://infragravity.com/knowledge-base/
+replicaCount: 1
 image:
   repo: "infragravity/sonar"
   tag: "latest"
@@ -30,6 +31,8 @@ config:
   #   cluster: "mycluster"
   #agent:
     #interval: "10s"
+  name: "Sonar.config"
+  log_level: "Information"    
   outputs:
     sonar:
       exporter_enabled: true

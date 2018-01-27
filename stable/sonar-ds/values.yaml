@@ -30,6 +30,7 @@ config:
   #   cluster: "mycluster"
   #agent:
     #interval: "10s"
+  name: "Sonar.config"
   outputs:
     sonar:
       exporter_enabled: true

@@ -13,10 +13,12 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
 spec:
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . |  sha256sum | trunc 63 }}
     spec:
       containers:
       - name: {{ template "fullname" . }}
@@ -34,7 +36,9 @@ spec:
         - name: SONAR_CONFIG_PATH
           value: "/var/sonar/config/Sonar.config"     
         - name: SONAR_KEY_PATH
-          value: "/var/sonar/keys/Sonarc.dll.config"      
+          value: "/var/sonar/keys/Sonarc.dll.config"
+        - name: SONAR_LOG_LEVEL
+          value : {{ .Values.config.log_level }}      
       # This pulls HOSTNAME from the node, not the pod.
         - name: HOSTNAME
           valueFrom:
@@ -53,9 +57,6 @@ spec:
           readOnly: true
         - name: docker-socket
           mountPath: /var/run/docker.sock
-        - name: varrunutmpro
-          mountPath: /var/run/utmp
-          readOnly: true
         - name: config
           mountPath: /var/sonar/config
         - name: secret
@@ -70,9 +71,6 @@ spec:
       - name: procro
         hostPath:
           path: /proc
-      - name: varrunutmpro
-        hostPath:
-          path: /var/run/utmp
       - name: config
         configMap:
           name: {{ template "fullname" . }}

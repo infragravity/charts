@@ -12,4 +12,4 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   Sonar.config: |-
-{{ .Files.Get "Sonar.config" | indent 8 }}
+{{ .Files.Get .Values.config.name | indent 8 }}

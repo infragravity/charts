@@ -1,3 +1,3 @@
 # Akumuli Helm Chart
 
-This chart have been has moved to [GitLab](https://gitlab.com/infragravity/charts/tree/master/stable/akumuli).
+The latest Helm chart for [Akumuli](https://gitlab.com/akumuli/akumuli) is available from [GitLab](https://gitlab.com/infragravity/charts/tree/master/stable/akumuli).
